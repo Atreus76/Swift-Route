@@ -21,31 +21,38 @@ public class SwiftrouteApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(SwiftrouteApplication.class, args);
-		Order order = Order.place(java.util.UUID.randomUUID(), com.example.swiftroute.order.domain.valueObject.DeliveryAddress.of("123 Main St", "Anytown", "12345", "USA"));
+		// Order order = Order.place(java.util.UUID.randomUUID(), com.example.swiftroute.order.domain.valueObject.DeliveryAddress.of("123 Main St", "Anytown", "12345", "USA"));
 		
-		// order.addLine(com.example.swiftroute.order.domain.model.OrderLine.of(
-		// 	java.util.UUID.randomUUID(),
-		// 	"test-sku",
-		// 	"test description",
-		// 	12,
-		// 	new BigDecimal("0.45"),
-        //     new BigDecimal("0.003"),
-        //     new BigDecimal("1499.99")));
+		// System.out.println("Order status: " + order.getStatus());
+		// order.confirm();
+		// System.out.println("After confirm: " + order.getStatus());
+		// order.confirm();
+		// System.out.println("After second confirm: " + order.getStatus());
 		
 		
 		
 	}
 
 	@Bean
-	@Transactional
 CommandLineRunner test(OrderRepository orderRepository) {
     return args -> {
+        // 1. Create and save
         DeliveryAddress address = DeliveryAddress.of("123 Main St", "Hanoi", "100000", "Vietnam");
         Order order = Order.place(UUID.randomUUID(), address);
         orderRepository.save(order);
+        System.out.println("Saved order: " + order.getId());
 
+        // 2. Load back
         Order loaded = orderRepository.findById(order.getId()).orElseThrow();
-        System.out.println("Status: " + loaded.getStatus()); // should print PENDING
+        System.out.println("Loaded status: " + loaded.getStatus()); // PENDING
+
+        // 3. Confirm and save again
+        loaded.confirm();
+        orderRepository.save(loaded);
+
+        // 4. Load again and verify
+        Order confirmed = orderRepository.findById(order.getId()).orElseThrow();
+        System.out.println("After confirm: " + confirmed.getStatus()); // CONFIRMED
     };
 }
 

@@ -1,7 +1,6 @@
 package com.example.swiftroute.order.domain.model;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -45,45 +44,52 @@ public class Order {
         return new Order(UUID.randomUUID(), customerId, OrderStatus.PENDING, deliveryAddress, Instant.now(), Instant.now(), 0L, new ArrayList<>());
     }
 
-    public Order confirm(){
+    public void confirm(){
         if(!status.canTransitionTo(OrderStatus.CONFIRMED)) {
             throw new IllegalStateException("Cannot transition from " + status + " to CONFIRMED");
         }
-        return new Order(id, customerId, OrderStatus.CONFIRMED, deliveryAddress, createdAt, Instant.now(), version + 1, orderLines);
+        this.status = OrderStatus.CONFIRMED;
+        this.updatedAt = Instant.now();
+        // this.version++;
     }
 
-    public Order cancel(String reason) {
+    public void cancel(){
         if(!status.canTransitionTo(OrderStatus.CANCELLED)) {
             throw new IllegalStateException("Cannot transition from " + status + " to CANCELLED");
         }
-        // Log cancellation reason if needed
-        return new Order(id, customerId, OrderStatus.CANCELLED, deliveryAddress, createdAt, Instant.now(), version + 1, orderLines);
+        this.status = OrderStatus.CANCELLED;
+        this.updatedAt = Instant.now();
+        this.version++;
     }
 
-    public Order markDispatched(){
+    public void markDispatched(){
         if(!status.canTransitionTo(OrderStatus.DISPATCHED)) {
             throw new IllegalStateException("Cannot transition from " + status + " to DISPATCHED");
         }
-        return new Order(id, customerId, OrderStatus.DISPATCHED, deliveryAddress, createdAt, Instant.now(), version + 1, orderLines);
+        this.status = OrderStatus.DISPATCHED;
+        this.updatedAt = Instant.now();
+        this.version++;
     }
 
-    public Order markDelivered(){
+    public void markDelivered(){
         if(!status.canTransitionTo(OrderStatus.DELIVERED)) {
             throw new IllegalStateException("Cannot transition from " + status + " to DELIVERED");
         }
-        return new Order(id, customerId, OrderStatus.DELIVERED, deliveryAddress, createdAt, Instant.now(), version + 1, orderLines);
+        this.status = OrderStatus.DELIVERED;
+        this.updatedAt = Instant.now();
+        this.version++;
     }
 
-    public Order addLine(OrderLine line){
+    public void addLine(OrderLine line){
         if(line == null) {
             throw new IllegalArgumentException("Order line cannot be null");
         }
         if (status != OrderStatus.PENDING) {
             throw new IllegalStateException("Can only add lines to PENDING orders");
         }
-        List<OrderLine> newLines = new ArrayList<>(orderLines);
-        newLines.add(line);
-        return new Order(id, customerId, status, deliveryAddress, createdAt, Instant.now(), version + 1, newLines);
+        this.orderLines.add(line);
+        this.updatedAt = Instant.now();
+        this.version++;
     }
     
     public List<OrderLine> getLines() {

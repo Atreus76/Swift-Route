@@ -8,7 +8,7 @@ import com.example.swiftroute.order.domain.model.Order;
 import com.example.swiftroute.order.domain.model.OrderStatus;
 
 public interface OrderRepository{
-    Order save(Order order);
+    void save(Order order);
     Optional<Order> findById(UUID id);
     List<Order> findByCustomerId(UUID customerId);
     List<Order> findByStatus(OrderStatus status);
