@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.swiftroute.order.infrastructure.persistence.OrderMapper">
+
+    <resultMap id="OrderResultMap" type="Order">
+        <id     property="id"         column="id"/>
+        <result property="customerId" column="customer_id"/>
+        <result property="status"     column="status"
+                typeHandler="org.apache.ibatis.type.EnumTypeHandler"/>
+        <result property="createdAt"  column="created_at"/>
+        <result property="updatedAt"  column="updated_at"/>
+        <result property="version"    column="version"/>
+
+        <!-- DeliveryAddress embedded fields -->
+        <result property="deliveryAddress.street"     column="street"/>
+        <result property="deliveryAddress.city"       column="city"/>
+        <result property="deliveryAddress.postalCode" column="postal_code"/>
+        <result property="deliveryAddress.country"    column="country"/>
+    </resultMap>
+
+    <select id="findById" resultMap="OrderResultMap">
+        SELECT id, customer_id, status,
+               street, city, postal_code, country,
+               created_at, updated_at, version
+        FROM orders
+        WHERE id = #{id}
+    </select>
+
+    <insert id="insert">
+        INSERT INTO orders (id, customer_id, status,
+                           street, city, postal_code, country,
+                           created_at, updated_at, version)
+        VALUES (#{id}, #{customerId}, #{status},
+                #{deliveryAddress.street}, #{deliveryAddress.city},
+                #{deliveryAddress.postalCode}, #{deliveryAddress.country},
+                #{createdAt}, #{updatedAt}, #{version})
+    </insert>
+
+    <update id="update">
+        UPDATE orders SET
+            status      = #{status},
+            updated_at  = #{updatedAt},
+            version     = #{version}
+        WHERE id = #{id}
+    </update>
+
+</mapper>
