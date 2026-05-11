@@ -8,6 +8,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.swiftroute.order.application.port.OrderRepository;
 import com.example.swiftroute.order.domain.model.Order;
@@ -36,6 +37,7 @@ public class SwiftrouteApplication {
 	}
 
 	@Bean
+	@Transactional
 CommandLineRunner test(OrderRepository orderRepository) {
     return args -> {
         DeliveryAddress address = DeliveryAddress.of("123 Main St", "Hanoi", "100000", "Vietnam");

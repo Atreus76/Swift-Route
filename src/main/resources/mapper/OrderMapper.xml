@@ -4,35 +4,52 @@
 
 <mapper namespace="com.example.swiftroute.order.infrastructure.persistence.OrderMapper">
 
-    <resultMap id="OrderResultMap" type="Order">
-        <id     property="id"         column="id"/>
-        <result property="customerId" column="customer_id"/>
-        <result property="status"     column="status"
-                typeHandler="org.apache.ibatis.type.EnumTypeHandler"/>
-        <result property="createdAt"  column="created_at"/>
-        <result property="updatedAt"  column="updated_at"/>
-        <result property="version"    column="version"/>
+    <resultMap id="OrderResultMap" type="com.example.swiftroute.order.domain.model.Order">
+    <!-- Map UUIDs using jdbcType="OTHER" -->
+    <id property="id" column="id" 
+    typeHandler="com.example.swiftroute.order.infrastructure.persistence.UUIDTypeHandler"/>
+    <result property="customerId" column="customer_id" 
+    typeHandler="com.example.swiftroute.order.infrastructure.persistence.UUIDTypeHandler"/>
+    
+    <result property="status" column="status"
+            typeHandler="org.apache.ibatis.type.EnumTypeHandler"
+            />
+    <result property="createdAt"  column="created_at"/>
+    <result property="updatedAt"  column="updated_at"/>
+    <result property="version"    column="version"/>
+    <!-- DeliveryAddress embedded fields -->
 
-        <!-- DeliveryAddress embedded fields -->
-        <result property="deliveryAddress.street"     column="street"/>
-        <result property="deliveryAddress.city"       column="city"/>
-        <result property="deliveryAddress.postalCode" column="postal_code"/>
-        <result property="deliveryAddress.country"    column="country"/>
-    </resultMap>
+    <association property="deliveryAddress" javaType="com.example.swiftroute.order.domain.valueObject.DeliveryAddress">
+        <result property="street"     column="street"/>
+        <result property="city"       column="city"/>
+        <result property="postalCode" column="postal_code"/>
+        <result property="country"    column="country"/>
+    </association>
+    
+
+</resultMap>
 
     <select id="findById" resultMap="OrderResultMap">
-        SELECT id, customer_id, status,
-               street, city, postal_code, country,
-               created_at, updated_at, version
-        FROM orders
-        WHERE id = #{id}
-    </select>
+    SELECT 
+        id, 
+        customer_id, 
+        status, 
+        created_at,  <!-- Position 4 -->
+        updated_at,  <!-- Position 5 -->
+        version,     <!-- Position 6 -->
+        street,      <!-- Position 7 -->
+        city,        <!-- Position 8 -->
+        postal_code, 
+        country
+    FROM orders
+    WHERE id = #{id}
+</select>
 
     <insert id="insert">
         INSERT INTO orders (id, customer_id, status,
                            street, city, postal_code, country,
                            created_at, updated_at, version)
-        VALUES (#{id}, #{customerId}, #{status},
+        VALUES (#{id, jdbcType=OTHER}, #{customerId, jdbcType=OTHER}, #{status},
                 #{deliveryAddress.street}, #{deliveryAddress.city},
                 #{deliveryAddress.postalCode}, #{deliveryAddress.country},
                 #{createdAt}, #{updatedAt}, #{version})
@@ -42,8 +59,8 @@
         UPDATE orders SET
             status      = #{status},
             updated_at  = #{updatedAt},
-            version     = #{version}
-        WHERE id = #{id}
+            version     = version + 1
+        WHERE id = #{id} AND version = #{version}
     </update>
 
 </mapper>

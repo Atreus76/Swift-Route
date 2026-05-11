@@ -20,13 +20,13 @@ public class OrderRepositoryAdapter implements OrderRepository{
 
     @Override
     public Order save(Order order) {
+        // Attempt to update the record first
+        int affectedRows = orderMapper.update(order);
         
-        if(order.getId() == null) {
+        // If no rows were updated, the record doesn't exist yet, so insert it
+        if (affectedRows == 0) {
             orderMapper.insert(order);
-        } else {
-            orderMapper.update(order);
         }
-
         return order;
     }
 

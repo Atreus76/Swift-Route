@@ -4,12 +4,14 @@ import java.util.Objects;
 
 
 public class DeliveryAddress {
-    private final String street;
-    private final String city;
-    private final String postalCode;
-    private final String country;
+    private  String street;
+    private  String city;
+    private  String postalCode;
+    private  String country;
 
-    protected DeliveryAddress(String street, String city, String postalCode, String country) {
+    protected DeliveryAddress(){}
+
+    private DeliveryAddress(String street, String city, String postalCode, String country) {
         this.street = street;
         this.city = city;
         this.postalCode = postalCode;
