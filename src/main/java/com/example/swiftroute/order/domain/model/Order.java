@@ -59,7 +59,7 @@ public class Order {
         }
         this.status = OrderStatus.CANCELLED;
         this.updatedAt = Instant.now();
-        this.version++;
+        // this.version++;
     }
 
     public void markDispatched(){
@@ -68,7 +68,7 @@ public class Order {
         }
         this.status = OrderStatus.DISPATCHED;
         this.updatedAt = Instant.now();
-        this.version++;
+        // this.version++;
     }
 
     public void markDelivered(){
@@ -77,7 +77,7 @@ public class Order {
         }
         this.status = OrderStatus.DELIVERED;
         this.updatedAt = Instant.now();
-        this.version++;
+        // this.version++;
     }
 
     public void addLine(OrderLine line){
@@ -89,7 +89,7 @@ public class Order {
         }
         this.orderLines.add(line);
         this.updatedAt = Instant.now();
-        this.version++;
+        // this.version++;
     }
     
     public List<OrderLine> getLines() {

@@ -8,9 +8,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.transaction.annotation.Transactional;
 
-import com.example.swiftroute.order.application.port.OrderRepository;
+import com.example.swiftroute.order.application.service.OrderApplicationService;
 import com.example.swiftroute.order.domain.model.Order;
 import com.example.swiftroute.order.domain.valueObject.DeliveryAddress;
 
@@ -33,27 +32,25 @@ public class SwiftrouteApplication {
 		
 	}
 
-	@Bean
-CommandLineRunner test(OrderRepository orderRepository) {
-    return args -> {
-        // 1. Create and save
-        DeliveryAddress address = DeliveryAddress.of("123 Main St", "Hanoi", "100000", "Vietnam");
-        Order order = Order.place(UUID.randomUUID(), address);
-        orderRepository.save(order);
-        System.out.println("Saved order: " + order.getId());
+// 	@Bean
+// CommandLineRunner test(OrderApplicationService orderService) {
+//     return args -> {
+//         // 1. Create and save
+//         DeliveryAddress address = DeliveryAddress.of("123 Main St", "Hanoi", "100000", "Vietnam");
+//         Order order = orderService.placeOrder(UUID.randomUUID(), address);
+//         System.out.println("Saved order: " + order.getId());
 
-        // 2. Load back
-        Order loaded = orderRepository.findById(order.getId()).orElseThrow();
-        System.out.println("Loaded status: " + loaded.getStatus()); // PENDING
+//         // 2. Load back
+//         Order loaded = orderService.getOrder(order.getId());
+//         System.out.println("Loaded status: " + loaded.getStatus()); // PENDING
 
-        // 3. Confirm and save again
-        loaded.confirm();
-        orderRepository.save(loaded);
+//         // 3. Confirm and save again
+//         orderService.confirmOrder(order.getId());
 
-        // 4. Load again and verify
-        Order confirmed = orderRepository.findById(order.getId()).orElseThrow();
-        System.out.println("After confirm: " + confirmed.getStatus()); // CONFIRMED
-    };
-}
+//         // 4. Load again and verify
+//         Order confirmed = orderService.getOrder(order.getId());
+//         System.out.println("After confirm: " + confirmed.getStatus()); // CONFIRMED
+//     };
+// }
 
 }
