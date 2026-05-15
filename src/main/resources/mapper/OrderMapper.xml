@@ -5,7 +5,6 @@
 <mapper namespace="com.example.swiftroute.order.infrastructure.persistence.OrderMapper">
 
     <resultMap id="OrderResultMap" type="com.example.swiftroute.order.domain.model.Order">
-    <!-- Map UUIDs using jdbcType="OTHER" -->
     <id property="id" column="id" 
     typeHandler="com.example.swiftroute.order.infrastructure.persistence.UUIDTypeHandler"/>
     <result property="customerId" column="customer_id" 
@@ -25,24 +24,32 @@
         <result property="postalCode" column="postal_code"/>
         <result property="country"    column="country"/>
     </association>
+
+     <collection property="orderLines" ofType="OrderLine">
+        <id property="id" column="line_id"/>
+        <result property="orderId" column="order_id"/>
+        <result property="sku" column="sku"/>
+        <result property="description" column="description"/>
+        <result property="quantity" column="quantity"/>
+        <result property="weightKg" column="weight_kg"/>
+        <result property="volumeM3" column="volume_m3"/>
+        <result property="unitPrice" column="unit_price"/>
+    </collection>
     
 
 </resultMap>
 
     <select id="findById" resultMap="OrderResultMap">
     SELECT 
-        id, 
-        customer_id, 
-        status, 
-        created_at,  <!-- Position 4 -->
-        updated_at,  <!-- Position 5 -->
-        version,     <!-- Position 6 -->
-        street,      <!-- Position 7 -->
-        city,        <!-- Position 8 -->
-        postal_code, 
-        country
-    FROM orders
-    WHERE id = #{id}
+        o.id, o.customer_id, o.status,
+        o.street, o.city, o.postal_code, o.country,
+        o.created_at, o.updated_at, o.version,
+        ol.id as line_id, ol.order_id, ol.sku,
+        ol.description, ol.quantity,
+        ol.weight_kg, ol.volume_m3, ol.unit_price
+    FROM orders o
+    LEFT JOIN order_lines ol ON ol.order_id = o.id
+    WHERE o.id = #{id}
 </select>
 
     <insert id="insert">

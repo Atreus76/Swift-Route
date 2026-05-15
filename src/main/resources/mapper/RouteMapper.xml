@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.swiftroute.dispatch.infrastructure.persistence.RouteMapper">
+    <resultMap id="RouteResultMap" type="com.example.swiftroute.dispatch.domain.model.Route">
+        <id property="id" column="id" 
+        typeHandler="com.example.swiftroute.dispatch.infrastructure.persistence.UUIDTypeHandler"/>
+        <result property="driverId" column="driver_id" 
+        typeHandler="com.example.swiftroute.dispatch.infrastructure.persistence.UUIDTypeHandler"/>
+        <result property="vehicleId" column="vehicle_id" 
+        typeHandler="com.example.swiftroute.dispatch.infrastructure.persistence.UUIDTypeHandler"/>
+        <result property="status" column="status"
+                typeHandler="org.apache.ibatis.type.EnumTypeHandler"
+                />
+        <result property="plannedDate" column="planned_date"/>
+        <collection property="routeStops" ofType="com.example.swiftroute.dispatch.domain.model.RouteStop">
+            <id property="id" column="stop_id" 
+            typeHandler="com.example.swiftroute.dispatch.infrastructure.persistence.UUIDTypeHandler"/>
+            <result property="routeId" column="route_id" 
+            typeHandler="com.example.swiftroute.dispatch.infrastructure.persistence.UUIDTypeHandler"/>
+            <result property="orderId" column="order_id" 
+            typeHandler="com.example.swiftroute.dispatch.infrastructure.persistence.UUIDTypeHandler"/>
+            <result property="stopSequence" column="stop_sequence"/>
+            <result property="status" column="stop_status"
+                    typeHandler="org.apache.ibatis.type.EnumTypeHandler"
+                    />
+        </collection>
+    </resultMap>
+
+    <select id="findById" resultMap="RouteResultMap">
+    SELECT 
+        r.id,
+        r.driver_id,
+        r.vehicle_id,
+        r.status,
+        r.planned_date,
+        rs.id as stop_id,
+        rs.route_id,
+        rs.order_id,
+        rs.stop_sequence,
+        rs.status as stop_status
+    FROM routes r
+    LEFT JOIN route_stops rs ON rs.route_id = r.id
+    WHERE r.id = #{id}
+    </select>
+
+    <insert id="insert">
+        INSERT INTO routes (id, driver_id, vehicle_id, status, planned_date)
+        VALUES (#{id, jdbcType=OTHER}, #{driverId, jdbcType=OTHER}, #{vehicleId, jdbcType=OTHER}, #{status}, #{plannedDate})
+    </insert>
+
+    <update id="update">
+        UPDATE routes
+        SET driver_id = #{driverId, jdbcType=OTHER},
+            vehicle_id = #{vehicleId, jdbcType=OTHER},
+            status = #{status},
+            planned_date = #{plannedDate}
+        WHERE id = #{id, jdbcType=OTHER}
+    </update>
+
+    <select id="existsById" resultType="boolean">
+        SELECT COUNT(1) FROM routes WHERE id = #{id}
+    </select>
+</mapper>

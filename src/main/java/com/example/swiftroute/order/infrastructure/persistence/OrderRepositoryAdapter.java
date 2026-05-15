@@ -21,7 +21,7 @@ public class OrderRepositoryAdapter implements OrderRepository{
     @Override
     public void save(Order order) {
         if (orderMapper.existById(order.getId())) {
-    orderMapper.update(order);
+        orderMapper.update(order);
     } else {
         orderMapper.insert(order);
     }
