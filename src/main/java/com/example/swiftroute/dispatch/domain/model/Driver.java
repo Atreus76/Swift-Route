@@ -36,6 +36,20 @@ public class Driver {
         return new Driver(UUID.randomUUID(), name, licenseNumber, phoneNumber, DriverStatus.AVAILABLE);
     }
 
+    public void markAvailable(){
+        if (status == DriverStatus.AVAILABLE){
+            throw new IllegalStateException("Driver is already available");
+        }
+        this.status = DriverStatus.AVAILABLE;
+    }
+
+    public void markOnRoute() {
+        if (status == DriverStatus.ON_ROUTE) {
+            throw new IllegalStateException("Driver is already assigned to a route");
+        }
+        this.status = DriverStatus.ON_ROUTE;
+    }
+
     public void markUnavailable() {
         if (status == DriverStatus.UNAVAILABLE) {
             throw new IllegalStateException("Driver is already unavailable");

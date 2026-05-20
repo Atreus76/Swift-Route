@@ -6,9 +6,9 @@
 
     <resultMap id="OrderResultMap" type="com.example.swiftroute.order.domain.model.Order">
     <id property="id" column="id" 
-    typeHandler="com.example.swiftroute.order.infrastructure.persistence.UUIDTypeHandler"/>
+    typeHandler="com.example.swiftroute.shared.infrastructure.persistence.UUIDTypeHandler"/>
     <result property="customerId" column="customer_id" 
-    typeHandler="com.example.swiftroute.order.infrastructure.persistence.UUIDTypeHandler"/>
+    typeHandler="com.example.swiftroute.shared.infrastructure.persistence.UUIDTypeHandler"/>
     
     <result property="status" column="status"
             typeHandler="org.apache.ibatis.type.EnumTypeHandler"

@@ -1,6 +1,7 @@
 package com.example.swiftroute.dispatch.infrastructure.persistence;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
 
@@ -25,8 +26,8 @@ public class DriverRepositoryAdapter implements DriverRepository {
     }
 
     @Override
-    public Driver findById(java.util.UUID id) {
-        return driverMapper.findById(id).orElse(null);
+    public Optional<Driver> findById(java.util.UUID id) {
+        return driverMapper.findById(id);
     }
 
     @Override

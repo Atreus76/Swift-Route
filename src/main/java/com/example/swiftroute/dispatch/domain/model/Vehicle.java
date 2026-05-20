@@ -40,6 +40,21 @@ public class Vehicle {
 
         return new Vehicle(id, type, licensePlate, VehicleStatus.AVAILABLE, maxWeightKg, maxVolumeM3);
     }
+    public void markReserved() {
+        if (status == VehicleStatus.RESERVED) {
+            throw new IllegalStateException("Vehicle is already reserved");
+        }
+        this.status = VehicleStatus.RESERVED;
+    }
+
+
+    public void markAvailable() {
+        if (status == VehicleStatus.AVAILABLE) {
+            throw new IllegalStateException("Vehicle is already available");
+        }
+        this.status = VehicleStatus.AVAILABLE;
+    }
+
 
     public void markUnavailable() {
         if (status == VehicleStatus.UNAVAILABLE) {

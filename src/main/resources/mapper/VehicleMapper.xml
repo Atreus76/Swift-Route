@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.example.swiftroute.dispatch.infrastructure.persistence.RouteMapper">
+<mapper namespace="com.example.swiftroute.dispatch.infrastructure.persistence.VehicleMapper">
     <resultMap id="VehicleResultMap" type="com.example.swiftroute.dispatch.domain.model.Vehicle">
         <id property="id" column="id" 
-        typeHandler="com.example.swiftroute.dispatch.infrastructure.persistence.UUIDTypeHandler"/>
+        typeHandler="com.example.swiftroute.shared.infrastructure.persistence.UUIDTypeHandler"/>
         <result property="type" column="type"/>
         <result property="licensePlate" column="license_plate"/>
         <result property="status" column="status"
@@ -52,10 +52,10 @@
         WHERE id = #{id, jdbcType=OTHER}
     </update>
 
-    <insert id="existById" resultType="boolean">
+    <select id="existsById" resultType="boolean">
     SELECT COUNT(1) &gt; 0
     FROM vehicles
     WHERE id = #{id}
-    </insert>
+    </select>
 
 </mapper>

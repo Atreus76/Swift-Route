@@ -4,22 +4,24 @@
 <mapper namespace="com.example.swiftroute.dispatch.infrastructure.persistence.RouteMapper">
     <resultMap id="RouteResultMap" type="com.example.swiftroute.dispatch.domain.model.Route">
         <id property="id" column="id" 
-        typeHandler="com.example.swiftroute.dispatch.infrastructure.persistence.UUIDTypeHandler"/>
+        typeHandler="com.example.swiftroute.shared.infrastructure.persistence.UUIDTypeHandler"/>
         <result property="driverId" column="driver_id" 
-        typeHandler="com.example.swiftroute.dispatch.infrastructure.persistence.UUIDTypeHandler"/>
+        typeHandler="com.example.swiftroute.shared.infrastructure.persistence.UUIDTypeHandler"/>
         <result property="vehicleId" column="vehicle_id" 
-        typeHandler="com.example.swiftroute.dispatch.infrastructure.persistence.UUIDTypeHandler"/>
+        typeHandler="com.example.swiftroute.shared.infrastructure.persistence.UUIDTypeHandler"/>
         <result property="status" column="status"
                 typeHandler="org.apache.ibatis.type.EnumTypeHandler"
                 />
         <result property="plannedDate" column="planned_date"/>
-        <collection property="routeStops" ofType="com.example.swiftroute.dispatch.domain.model.RouteStop">
+        <collection property="routeStops"
+         
+         javaType="com.example.swiftroute.dispatch.domain.model.RouteStop">
             <id property="id" column="stop_id" 
-            typeHandler="com.example.swiftroute.dispatch.infrastructure.persistence.UUIDTypeHandler"/>
+            typeHandler="com.example.swiftroute.shared.infrastructure.persistence.UUIDTypeHandler"/>
             <result property="routeId" column="route_id" 
-            typeHandler="com.example.swiftroute.dispatch.infrastructure.persistence.UUIDTypeHandler"/>
+            typeHandler="com.example.swiftroute.shared.infrastructure.persistence.UUIDTypeHandler"/>
             <result property="orderId" column="order_id" 
-            typeHandler="com.example.swiftroute.dispatch.infrastructure.persistence.UUIDTypeHandler"/>
+            typeHandler="com.example.swiftroute.shared.infrastructure.persistence.UUIDTypeHandler"/>
             <result property="stopSequence" column="stop_sequence"/>
             <result property="status" column="stop_status"
                     typeHandler="org.apache.ibatis.type.EnumTypeHandler"

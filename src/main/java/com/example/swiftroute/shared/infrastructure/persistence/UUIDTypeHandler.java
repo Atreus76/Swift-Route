@@ -1,4 +1,4 @@
-package com.example.swiftroute.dispatch.infrastructure.persistence;
+package com.example.swiftroute.shared.infrastructure.persistence;
 
 import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
@@ -9,7 +9,7 @@ import java.util.UUID;
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
 
-public class UUIDTypeHandler extends BaseTypeHandler<UUID> {
+public class UUIDTypeHandler extends BaseTypeHandler<UUID>{
     @Override
     public void setNonNullParameter(PreparedStatement ps, int i, UUID parameter, JdbcType jdbcType) throws SQLException {
         ps.setObject(i, parameter);
@@ -24,7 +24,6 @@ public class UUIDTypeHandler extends BaseTypeHandler<UUID> {
     }
     @Override
     public UUID getNullableResult(CallableStatement cs, int columnIndex) throws SQLException {
-        return cs.getObject(columnIndex, UUID .class);
+        return cs.getObject(columnIndex, UUID.class);
     }
-
 }

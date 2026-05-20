@@ -14,7 +14,10 @@ import com.example.swiftroute.order.domain.model.Order;
 import com.example.swiftroute.order.domain.valueObject.DeliveryAddress;
 
 
-@MapperScan("com.example.swiftroute.order.infrastructure.persistence")
+@MapperScan({
+    "com.example.swiftroute.order.infrastructure.persistence",
+    "com.example.swiftroute.dispatch.infrastructure.persistence"
+})
 @SpringBootApplication
 public class SwiftrouteApplication {
 
