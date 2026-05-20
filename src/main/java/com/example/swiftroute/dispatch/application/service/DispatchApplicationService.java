@@ -1,5 +1,6 @@
 package com.example.swiftroute.dispatch.application.service;
 
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.UUID;
 
@@ -99,6 +100,30 @@ public class DispatchApplicationService {
     public Route getRoute(UUID routeId){
         return routeRepository.findById(routeId).orElseThrow(
             () -> EntityNotFoundException.of("Route", routeId));
+    }
+
+    @Transactional
+    public Driver createDriver(String name, String licenseNumber, String phoneNumber){
+        Driver driver = Driver.register(name, licenseNumber, phoneNumber);
+        driverRepository.save(driver);
+        return driver;
+    }
+
+    @Transactional
+    public Vehicle createVehicle(String type, String licensePlate, BigDecimal maxWeightKg, BigDecimal maxVolumeM3){
+        Vehicle vehicle = Vehicle.register(UUID.randomUUID(), type, licensePlate, maxWeightKg, maxVolumeM3);
+        vehicleRepository.save(vehicle);
+        return vehicle;
+    }
+
+    public Driver getDriver(UUID driverId){
+        return driverRepository.findById(driverId).orElseThrow(
+            () -> EntityNotFoundException.of("Driver", driverId));
+    }
+
+    public Vehicle getVehicle(UUID vehicleId){
+        return vehicleRepository.findById(vehicleId).orElseThrow(
+            () -> EntityNotFoundException.of("Vehicle", vehicleId));
     }
 
 }
