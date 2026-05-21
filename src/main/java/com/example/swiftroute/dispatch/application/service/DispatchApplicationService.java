@@ -116,6 +116,14 @@ public class DispatchApplicationService {
         return vehicle;
     }
 
+    @Transactional
+    public void completeStop(UUID routeId, UUID stopId){
+        Route route = routeRepository.findById(routeId).orElseThrow(
+            () -> EntityNotFoundException.of("Route", routeId));
+        route.completeStop(stopId);
+        routeRepository.save(route);
+    }
+
     public Driver getDriver(UUID driverId){
         return driverRepository.findById(driverId).orElseThrow(
             () -> EntityNotFoundException.of("Driver", driverId));

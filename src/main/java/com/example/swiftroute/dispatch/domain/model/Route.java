@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import com.example.swiftroute.shared.EntityNotFoundException;
+
 public class Route {
     private UUID id;
     private UUID driverId;
@@ -77,6 +79,15 @@ public class Route {
             throw new IllegalStateException("Only routes in progress can be completed");
         }
         this.status = RouteStatus.COMPLETED;
+    }
+
+    public void completeStop(UUID stopId){
+        RouteStop targetStop = this.stops.stream()
+            .filter(stop -> stop.getId().equals(stopId))
+            .findFirst()
+            .orElseThrow();
+
+        targetStop.completeStop();
     }
 
     public UUID getId() {

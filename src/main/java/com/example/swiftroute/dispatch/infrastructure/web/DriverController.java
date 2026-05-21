@@ -14,10 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.swiftroute.dispatch.application.service.DispatchApplicationService;
 import com.example.swiftroute.dispatch.domain.model.Driver;
-import com.example.swiftroute.dispatch.domain.model.Vehicle;
 import com.example.swiftroute.dispatch.infrastructure.web.dto.CreateDriverRequest;
 import com.example.swiftroute.dispatch.infrastructure.web.dto.DriverResponse;
-import com.example.swiftroute.dispatch.infrastructure.web.dto.VehicleResponse;
 
 @RestController
 @RequestMapping("/api/drivers")
