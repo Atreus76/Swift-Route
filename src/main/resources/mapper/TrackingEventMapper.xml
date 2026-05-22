@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.swiftroute.tracking.infrastructure.persistence.TrackingEventMapper">
+    <resultMap id="TrackingEventResultMap" type="com.example.swiftroute.tracking.domain.model.TrackingEvent">
+    <id property="id" column="id"
+    typeHandler="com.example.swiftroute.shared.infrastructure.persistence.UUIDTypeHandler"/>
+    <result property="orderId" column="order_id" 
+    typeHandler="com.example.swiftroute.shared.infrastructure.persistence.UUIDTypeHandler"/>
+    <result property="routeId" column="route_id" 
+    typeHandler="com.example.swiftroute.shared.infrastructure.persistence.UUIDTypeHandler"/>
+    <result property="routeStopId" column="route_stop_id" 
+    typeHandler="com.example.swiftroute.shared.infrastructure.persistence.UUIDTypeHandler"/>
+    
+    <result property="status" column="status"
+            typeHandler="org.apache.ibatis.type.EnumTypeHandler"
+            />
+
+    <result property="description" column="description"/>
+    <result property="timestamp" column="time_stamp"/>
+    <result property="latitude" column="latitude"/>
+    <result property="longtitude" column="longtitude"/>
+
+    
+
+</mapper>

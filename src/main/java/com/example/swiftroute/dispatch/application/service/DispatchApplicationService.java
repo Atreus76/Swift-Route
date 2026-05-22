@@ -2,8 +2,10 @@ package com.example.swiftroute.dispatch.application.service;
 
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.time.Instant;
 import java.util.UUID;
 
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,6 +15,7 @@ import com.example.swiftroute.dispatch.application.port.VehicleRepository;
 import com.example.swiftroute.dispatch.domain.model.Driver;
 import com.example.swiftroute.dispatch.domain.model.Route;
 import com.example.swiftroute.dispatch.domain.model.RouteStop;
+import com.example.swiftroute.dispatch.domain.model.RouteStopCompletedEvent;
 import com.example.swiftroute.dispatch.domain.model.Vehicle;
 import com.example.swiftroute.shared.EntityNotFoundException;
 
@@ -21,6 +24,7 @@ public class DispatchApplicationService {
     private final RouteRepository routeRepository;
     private final DriverRepository driverRepository;
     private final VehicleRepository vehicleRepository;
+    private ApplicationEventPublisher eventPublisher;
 
     public DispatchApplicationService(RouteRepository routeRepository, DriverRepository driverRepository, VehicleRepository vehicleRepository) {
         this.routeRepository = routeRepository;
@@ -122,6 +126,7 @@ public class DispatchApplicationService {
             () -> EntityNotFoundException.of("Route", routeId));
         route.completeStop(stopId);
         routeRepository.save(route);
+        eventPublisher.publishEvent(new RouteStopCompletedEvent(routeId, stopId, Instant.now()));
     }
 
     public Driver getDriver(UUID driverId){
