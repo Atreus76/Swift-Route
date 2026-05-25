@@ -4,9 +4,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.springframework.stereotype.Repository;
+
 import com.example.swiftroute.tracking.application.port.TrackingRepository;
 import com.example.swiftroute.tracking.domain.model.TrackingEvent;
-
+@Repository
 public class TrackingEventRepositoryAdapter implements TrackingRepository{
 
     private final TrackingEventMapper trackingEventMapper;

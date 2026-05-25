@@ -22,6 +22,48 @@
     <result property="latitude" column="latitude"/>
     <result property="longtitude" column="longtitude"/>
 
-    
+</resultMap>
+
+    <select id="findById" resultMap="TrackingEventResultMap">
+        SELECT
+             id,
+             order_id,
+             route_id,
+             route_stop_id,
+             status,
+             description,
+             time_stamp,
+             latitude,
+             longtitude
+        FROM tracking_events
+        WHERE id = #{id}
+    </select>
+
+    <select id="findByOrderId" resultMap="TrackingEventResultMap">
+        SELECT
+             t.id,
+             t.order_id,
+             t.route_id,
+             t.route_stop_id,
+             t.status,
+             t.description,
+             t.time_stamp,
+             t.latitude,
+             t.longtitude
+        FROM tracking_events t
+        WHERE t.order_id = #{id}
+    </select>
+
+    <insert id="insert">
+        INSERT INTO tracking_events (id, order_id, route_id, route_stop_id,
+                                        status, description, time_stamp,
+                                        latitude, longtitude)
+        VALUES (#{id, jdbcType=OTHER}, #{orderId, jdbcType=OTHER},
+                #{routeId, jdbcType=OTHER}, #{routeStopId, jdbcType=OTHER},
+                #{status}, #{description}, #{time_stamp}, #{latitude}, #{longtitude})
+    </insert>
+    <select id="existById" resultType="boolean">
+    SELECT COUNT(1) &gt; 0 FROM orders WHERE id = #{id}
+    </select>
 
 </mapper>

@@ -3,12 +3,13 @@ package com.example.swiftroute.tracking.application.service;
 import java.util.UUID;
 
 import org.springframework.context.event.EventListener;
+import org.springframework.stereotype.Service;
 
 import com.example.swiftroute.order.domain.model.OrderDeliveredEvent;
 import com.example.swiftroute.shared.EntityNotFoundException;
 import com.example.swiftroute.tracking.application.port.TrackingRepository;
 import com.example.swiftroute.tracking.domain.model.TrackingEvent;
-
+@Service
 public class TrackingService {
     
     private final TrackingRepository trackingRepository;

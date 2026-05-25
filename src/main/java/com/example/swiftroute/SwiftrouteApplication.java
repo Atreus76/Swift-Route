@@ -16,7 +16,8 @@ import com.example.swiftroute.order.domain.valueObject.DeliveryAddress;
 
 @MapperScan({
     "com.example.swiftroute.order.infrastructure.persistence",
-    "com.example.swiftroute.dispatch.infrastructure.persistence"
+    "com.example.swiftroute.dispatch.infrastructure.persistence",
+	"com.example.swiftroute.tracking.infrastructure.persistence"
 })
 @SpringBootApplication
 public class SwiftrouteApplication {

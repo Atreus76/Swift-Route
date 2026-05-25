@@ -6,6 +6,6 @@ CREATE TABLE tracking_events(
     status VARCHAR(30) NOT NULL,
     description VARCHAR(255) NOT NULL,
     time_stamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    latitude DOUBLE,
-    longtitude DOUBLE
+    latitude DOUBLE PRECISION,
+    longtitude DOUBLE PRECISION
 );
