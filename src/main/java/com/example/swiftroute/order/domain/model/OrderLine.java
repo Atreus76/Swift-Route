@@ -4,14 +4,16 @@ import java.math.BigDecimal;
 import java.util.UUID;
 
 public class OrderLine {
-    private final UUID id;
-    private final UUID orderId;
-    private final String sku;
-    private final String description;
-    private final int quantity;
-    private final BigDecimal weightKg;
-    private final BigDecimal volumeM3;
-    private final BigDecimal unitPrice;
+    private  UUID id;
+    private  UUID orderId;
+    private  String sku;
+    private  String description;
+    private  int quantity;
+    private  BigDecimal weightKg;
+    private  BigDecimal volumeM3;
+    private  BigDecimal unitPrice;
+
+    protected OrderLine() {}
 
     private OrderLine(UUID id, UUID orderId, String sku, String description, int quantity, BigDecimal weightKg, BigDecimal volumeM3, BigDecimal unitPrice) {
         this.id = id;
@@ -49,6 +51,22 @@ public class OrderLine {
 
         return new OrderLine(UUID.randomUUID(), orderId, sku, description, quantity, weightKg, volumeM3, unitPrice);
     }
+
+    public static OrderLine reconstitute(UUID id, UUID orderId, String sku,
+                                      String description, int quantity,
+                                      BigDecimal weightKg, BigDecimal volumeM3,
+                                      BigDecimal unitPrice) {
+    OrderLine line = new OrderLine();
+    line.id = id;
+    line.orderId = orderId;
+    line.sku = sku;
+    line.description = description;
+    line.quantity = quantity;
+    line.weightKg = weightKg;
+    line.volumeM3 = volumeM3;
+    line.unitPrice = unitPrice;
+    return line;
+}
 
     public BigDecimal totalWeight(){
         return weightKg.multiply(BigDecimal.valueOf(quantity));

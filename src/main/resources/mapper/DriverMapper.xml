@@ -49,8 +49,8 @@
     </update>
 
     <select id="existById" resultType="boolean">
-    SELECT COUNT(1) &gt; 0
-    FROM drivers
-    WHERE id = #{id}
+        SELECT COUNT(1) &gt; 0
+        FROM drivers
+        WHERE id = #{id}
     </select>
 </mapper>

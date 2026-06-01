@@ -9,42 +9,29 @@
         typeHandler="com.example.swiftroute.shared.infrastructure.persistence.UUIDTypeHandler"/>
         <result property="vehicleId" column="vehicle_id" 
         typeHandler="com.example.swiftroute.shared.infrastructure.persistence.UUIDTypeHandler"/>
-        <result property="status" column="status"
-                typeHandler="org.apache.ibatis.type.EnumTypeHandler"
+        <result property="status" column="route_status"
+                javaType="com.example.swiftroute.dispatch.domain.model.RouteStatus"
                 />
         <result property="plannedDate" column="planned_date"/>
-        <collection property="routeStops"
-         
-         javaType="com.example.swiftroute.dispatch.domain.model.RouteStop">
-            <id property="id" column="stop_id" 
-            typeHandler="com.example.swiftroute.shared.infrastructure.persistence.UUIDTypeHandler"/>
-            <result property="routeId" column="route_id" 
-            typeHandler="com.example.swiftroute.shared.infrastructure.persistence.UUIDTypeHandler"/>
-            <result property="orderId" column="order_id" 
-            typeHandler="com.example.swiftroute.shared.infrastructure.persistence.UUIDTypeHandler"/>
-            <result property="stopSequence" column="stop_sequence"/>
-            <result property="status" column="stop_status"
-                    typeHandler="org.apache.ibatis.type.EnumTypeHandler"
-                    />
-        </collection>
+        <collection property="stops"
+                ofType="com.example.swiftroute.dispatch.domain.model.RouteStop"
+                select="findStopsByRouteId"
+                column="id"/>
     </resultMap>
 
     <select id="findById" resultMap="RouteResultMap">
+    SELECT id, driver_id, vehicle_id, status, planned_date
+    FROM routes
+    WHERE id = #{id}
+</select>
+
+<select id="findStopsByRouteId" resultType="com.example.swiftroute.dispatch.domain.model.RouteStop">
     SELECT 
-        r.id,
-        r.driver_id,
-        r.vehicle_id,
-        r.status,
-        r.planned_date,
-        rs.id as stop_id,
-        rs.route_id,
-        rs.order_id,
-        rs.stop_sequence,
-        rs.status as stop_status
-    FROM routes r
-    LEFT JOIN route_stops rs ON rs.route_id = r.id
-    WHERE r.id = #{id}
-    </select>
+        id, route_id, order_id,
+        stop_sequence, eta, status
+    FROM route_stops
+    WHERE route_id = #{id}
+</select>
 
     <insert id="insert">
         INSERT INTO routes (id, driver_id, vehicle_id, status, planned_date)
@@ -60,7 +47,7 @@
         WHERE id = #{id, jdbcType=OTHER}
     </update>
 
-    <select id="existsById" resultType="boolean">
+    <select id="existById" resultType="boolean">
         SELECT COUNT(1) FROM routes WHERE id = #{id}
     </select>
 </mapper>

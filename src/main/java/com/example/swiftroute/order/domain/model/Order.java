@@ -33,6 +33,21 @@ public class Order {
         this.orderLines.addAll(orderLines);
     }
 
+    public static Order reconstitute(UUID id, UUID customerId, OrderStatus status,
+                                  DeliveryAddress deliveryAddress, Instant createdAt,
+                                  Instant updatedAt, Long version, List<OrderLine> orderLines) {
+    Order order = new Order();
+    order.id = id;
+    order.customerId = customerId;
+    order.status = status;
+    order.deliveryAddress = deliveryAddress;
+    order.createdAt = createdAt;
+    order.updatedAt = updatedAt;
+    order.version = version;
+    order.orderLines = orderLines != null ? new ArrayList<>(orderLines) : new ArrayList<>();
+    return order;
+}
+
     public static Order place(UUID customerId, DeliveryAddress deliveryAddress) {
         if (customerId == null) {
             throw new IllegalArgumentException("Customer ID cannot be null");

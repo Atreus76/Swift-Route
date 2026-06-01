@@ -10,8 +10,8 @@ import com.example.swiftroute.order.domain.model.Order;
 
 @Mapper
 public interface OrderMapper {
-    void insert(Order order);
-    int update(Order order);
-    Optional<Order> findById(@Param("id") UUID id);
+    void insert(OrderPersistence order);
+    int update(OrderPersistence order);
+    Optional<OrderPersistence> findById(@Param("id") UUID id);
     boolean existById(@Param("id") UUID id);
 }

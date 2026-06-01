@@ -1,13 +1,15 @@
 package com.example.swiftroute.dispatch.infrastructure.web.dto;
 
-import com.example.swiftroute.dispatch.domain.model.DriverStatus;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
 public class CreateDriverRequest {
+    @NotNull
     private String name;
+    @NotNull
     private String licenseNumber;
+    @NotNull
     private String phoneNumber;
-    private DriverStatus status;
 }

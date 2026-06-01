@@ -61,8 +61,8 @@ public class DispatchApplicationService {
     public void addStop(UUID routeId, UUID orderId, int stopSequence){
         Route route = routeRepository.findById(routeId).orElseThrow(
             () -> EntityNotFoundException.of("Route", routeId));
-        RouteStop stop = RouteStop.of(routeId, orderId, stopSequence, null);
-
+        RouteStop stop = RouteStop.of(routeId, orderId, stopSequence, Instant.now());
+        System.out.println("Loaded route status: " + route.getStatus());
         route.addStop(stop);
 
         routeRepository.save(route);

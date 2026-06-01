@@ -13,23 +13,27 @@ import com.example.swiftroute.order.domain.model.OrderStatus;
 @Repository
 public class OrderRepositoryAdapter implements OrderRepository{
     private final OrderMapper orderMapper;
+    private final OrderConverter orderConverter;
 
-    public OrderRepositoryAdapter(OrderMapper orderMapper) {
+    public OrderRepositoryAdapter(OrderMapper orderMapper, OrderConverter orderConverter) {
         this.orderMapper = orderMapper;
+        this.orderConverter = orderConverter;
     }
 
     @Override
     public void save(Order order) {
+        OrderPersistence persistence = orderConverter.toPersistence(order);
         if (orderMapper.existById(order.getId())) {
-        orderMapper.update(order);
+        orderMapper.update(persistence);
     } else {
-        orderMapper.insert(order);
+        orderMapper.insert(persistence);
     }
     }
 
     @Override
     public Optional<Order> findById(java.util.UUID id) {
-        return orderMapper.findById(id);
+        return orderMapper.findById(id)
+            .map(orderConverter::toDomain);
     }
 
     @Override

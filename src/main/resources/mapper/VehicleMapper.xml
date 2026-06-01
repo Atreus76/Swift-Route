@@ -21,7 +21,7 @@
         license_plate, 
         status, 
         weight_kg, 
-        volume_m3, 
+        volume_m3
     FROM vehicles
     WHERE id = #{id}
     </select>
@@ -33,7 +33,7 @@
         license_plate, 
         status, 
         weight_kg, 
-        volume_m3,
+        volume_m3
     FROM vehicles
     </select>
 
@@ -52,10 +52,10 @@
         WHERE id = #{id, jdbcType=OTHER}
     </update>
 
-    <select id="existsById" resultType="boolean">
-    SELECT COUNT(1) &gt; 0
-    FROM vehicles
-    WHERE id = #{id}
+    <select id="existById" resultType="boolean">
+        SELECT COUNT(1) &gt; 0
+        FROM vehicles
+        WHERE id = #{id}
     </select>
 
 </mapper>

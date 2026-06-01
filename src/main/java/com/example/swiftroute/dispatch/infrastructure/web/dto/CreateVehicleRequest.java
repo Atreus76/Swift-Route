@@ -10,7 +10,6 @@ import lombok.Data;
 public class CreateVehicleRequest {
     private String type;
     private String licensePlate;
-    private VehicleStatus status;
     private BigDecimal maxWeightKg;
     private BigDecimal maxVolumeM3;
 }

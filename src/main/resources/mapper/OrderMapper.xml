@@ -25,31 +25,29 @@
         <result property="country"    column="country"/>
     </association>
 
-     <collection property="orderLines" ofType="OrderLine">
-        <id property="id" column="line_id"/>
-        <result property="orderId" column="order_id"/>
-        <result property="sku" column="sku"/>
-        <result property="description" column="description"/>
-        <result property="quantity" column="quantity"/>
-        <result property="weightKg" column="weight_kg"/>
-        <result property="volumeM3" column="volume_m3"/>
-        <result property="unitPrice" column="unit_price"/>
-    </collection>
-    
 
+    
+    <collection property="orderLines" 
+                ofType="com.example.swiftroute.order.domain.model.OrderLine"
+                select="findLinesByOrderId"
+                column="id"/>
 </resultMap>
 
     <select id="findById" resultMap="OrderResultMap">
     SELECT 
         o.id, o.customer_id, o.status,
         o.street, o.city, o.postal_code, o.country,
-        o.created_at, o.updated_at, o.version,
-        ol.id as line_id, ol.order_id, ol.sku,
-        ol.description, ol.quantity,
-        ol.weight_kg, ol.volume_m3, ol.unit_price
+        o.created_at, o.updated_at, o.version
     FROM orders o
-    LEFT JOIN order_lines ol ON ol.order_id = o.id
     WHERE o.id = #{id}
+</select>
+
+<select id="findLinesByOrderId" resultType="com.example.swiftroute.order.domain.model.OrderLine">
+    SELECT 
+        id, order_id, sku, description,
+        quantity, weight_kg, volume_m3, unit_price
+    FROM order_lines
+    WHERE order_id = #{id}
 </select>
 
     <insert id="insert">

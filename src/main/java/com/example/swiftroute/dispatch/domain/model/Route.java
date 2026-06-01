@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import com.example.swiftroute.shared.EntityNotFoundException;
 
 public class Route {
     private UUID id;
@@ -13,7 +12,7 @@ public class Route {
     private UUID vehicleId;
     private RouteStatus status;
     private Date plannedDate;
-    private List<RouteStop> stops;
+    private List<RouteStop> stops = new ArrayList<>();
 
     private Route(UUID id, UUID driverId, UUID vehicleId, RouteStatus status, Date plannedDate, List<RouteStop> stops) {
         this.id = id;
@@ -58,7 +57,7 @@ public class Route {
         if (stop == null) {
             throw new IllegalArgumentException("Route stop cannot be null");
         }
-        if (!status.equals(RouteStatus.ASSIGNED)) {
+        if (status != RouteStatus.ASSIGNED) {
             throw new IllegalStateException("Can only add stops to routes that are assigned or in progress");
         }
         this.stops.add(stop);
@@ -68,14 +67,14 @@ public class Route {
         if(vehicleId == null){
             throw new IllegalStateException("Cannot dispatch route without an assigned vehicle");
         }
-        if (!status.equals(RouteStatus.ASSIGNED)) {
+        if (status != RouteStatus.ASSIGNED) {
             throw new IllegalStateException("Only assigned routes can be dispatched");
         }
         this.status = RouteStatus.IN_PROGRESS;
     }
 
     public void complete(){
-        if (!status.equals(RouteStatus.IN_PROGRESS)) {
+        if (status != RouteStatus.IN_PROGRESS) {
             throw new IllegalStateException("Only routes in progress can be completed");
         }
         this.status = RouteStatus.COMPLETED;

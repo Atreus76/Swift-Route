@@ -16,11 +16,11 @@ public class DriverResponse {
 
     public static DriverResponse from(Driver driver){
         DriverResponse response = new DriverResponse();
-        response.setId(response.getId());
-        response.setName(response.getName());
-        response.setLicenseNumber(response.getLicenseNumber());
-        response.setPhoneNumber(response.getPhoneNumber());
-        response.setStatus(response.getStatus());
+        response.setId(driver.getId());
+        response.setName(driver.getName());
+        response.setLicenseNumber(driver.getLicenseNumber());
+        response.setPhoneNumber(driver.getPhoneNumber());
+        response.setStatus(driver.getStatus());
         return response;
     }
 }
