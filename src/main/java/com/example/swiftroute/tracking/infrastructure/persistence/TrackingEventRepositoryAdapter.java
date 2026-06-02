@@ -41,8 +41,7 @@ public class TrackingEventRepositoryAdapter implements TrackingRepository{
 
     @Override
     public Optional<TrackingEvent> findByOrderId(UUID id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findByOrderId'");
+        return trackingEventMapper.findByOrderId(id);
     }
     
 }

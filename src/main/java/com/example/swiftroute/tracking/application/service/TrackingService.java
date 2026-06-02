@@ -29,5 +29,11 @@ public class TrackingService {
             () -> EntityNotFoundException.of("Tracking Event", orderId)
         );
     }
+
+    public void addTrackingEvent(TrackingEvent event){
+        trackingRepository.save(event);
+    }
+
+    
     
 }

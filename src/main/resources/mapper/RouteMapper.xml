@@ -9,13 +9,13 @@
         typeHandler="com.example.swiftroute.shared.infrastructure.persistence.UUIDTypeHandler"/>
         <result property="vehicleId" column="vehicle_id" 
         typeHandler="com.example.swiftroute.shared.infrastructure.persistence.UUIDTypeHandler"/>
-        <result property="status" column="route_status"
+        <result property="status" column="status"
                 />
         <result property="plannedDate" column="planned_date"/>
         <collection property="stops"
                 ofType="com.example.swiftroute.dispatch.infrastructure.persistence.RouteStopPersistence"
                 select="findStopsByRouteId"
-                column="id"/>
+                column="{routeId=id}"/>
     </resultMap>
 
     <select id="findById" resultMap="RouteResultMap">
@@ -29,7 +29,7 @@
         id, route_id, order_id,
         stop_sequence, eta, status
     FROM route_stops
-    WHERE route_id = #{id}
+    WHERE route_id = #{routeId}
 </select>
 
     <insert id="insert">

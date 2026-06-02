@@ -13,5 +13,6 @@ public interface TrackingEventMapper {
     void insert(TrackingEvent trackingEvent);
     int update(TrackingEvent trackingEvent);
     Optional<TrackingEvent> findById(@Param("id") UUID id);
+    Optional<TrackingEvent> findByOrderId(@Param("orderId") UUID orderId);
     boolean existById(@Param("id") UUID id);
 }

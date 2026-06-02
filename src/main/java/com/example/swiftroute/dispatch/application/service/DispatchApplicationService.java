@@ -27,10 +27,11 @@ public class DispatchApplicationService {
     private ApplicationEventPublisher eventPublisher;
 
     public DispatchApplicationService(RouteRepository routeRepository, DriverRepository driverRepository,
-            VehicleRepository vehicleRepository) {
+            VehicleRepository vehicleRepository, ApplicationEventPublisher eventPublisher) {
         this.routeRepository = routeRepository;
         this.driverRepository = driverRepository;
         this.vehicleRepository = vehicleRepository;
+        this.eventPublisher = eventPublisher;
     }
 
     @Transactional
@@ -46,8 +47,8 @@ public class DispatchApplicationService {
                 () -> EntityNotFoundException.of("Route", routeId));
         Driver driver = driverRepository.findById(driverId).orElseThrow(
                 () -> EntityNotFoundException.of("Driver", driverId));
-        System.out.println("Driver name: " + driver.getName());
-        System.out.println("Driver status: " + driver.getStatus());
+        // System.out.println("Driver name: " + driver.getName());
+        // System.out.println("Driver status: " + driver.getStatus());
         Vehicle vehicle = vehicleRepository.findById(vehicleId).orElseThrow(
                 () -> EntityNotFoundException.of("Vehicle", vehicleId));
 
@@ -65,7 +66,7 @@ public class DispatchApplicationService {
         Route route = routeRepository.findById(routeId).orElseThrow(
                 () -> EntityNotFoundException.of("Route", routeId));
         RouteStop stop = RouteStop.of(routeId, orderId, stopSequence, Instant.now());
-        System.out.println("Loaded route status: " + route.getStatus());
+        // System.out.println("Loaded route status: " + route.getStatus());
         route.addStop(stop);
 
         routeRepository.save(route);
@@ -126,9 +127,14 @@ public class DispatchApplicationService {
     public void completeStop(UUID routeId, UUID stopId) {
         Route route = routeRepository.findById(routeId).orElseThrow(
                 () -> EntityNotFoundException.of("Route", routeId));
+
+        RouteStop stop = route.getStops().stream()
+            .filter(s -> s.getId().equals(stopId))
+            .findFirst()
+            .orElseThrow(() -> EntityNotFoundException.of("RouteStop", stopId));
         route.completeStop(stopId);
         routeRepository.save(route);
-        eventPublisher.publishEvent(new RouteStopCompletedEvent(routeId, stopId, Instant.now()));
+        eventPublisher.publishEvent(new RouteStopCompletedEvent(routeId, stop.getOrderId(), Instant.now()));
     }
 
     public Driver getDriver(UUID driverId) {

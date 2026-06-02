@@ -78,10 +78,10 @@ public class OrderApplicationService {
         eventPublisher.publishEvent(new OrderDeliveredEvent(orderId, Instant.now()));
     }
 
-    @EventListener
-    public void on(RouteStopCompletedEvent event){
-        markDelivered(event.orderId());
-    }
+    // @EventListener
+    // public void on(RouteStopCompletedEvent event){
+    //     markDelivered(event.orderId());
+    // }
 
 
 }

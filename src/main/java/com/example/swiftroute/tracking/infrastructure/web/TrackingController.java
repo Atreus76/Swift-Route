@@ -12,6 +12,9 @@ import java.util.UUID;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 
 @RestController
@@ -28,5 +31,13 @@ public class TrackingController {
         TrackingEvent trackingEvent = trackingService.getTrackingEventByOrderId(orderId);
         return ResponseEntity.ok(TrackingEventResponse.from(trackingEvent));
     }
+
+    @PostMapping
+    public String addTrackingEvent(@RequestBody String entity) {
+        //TODO: process POST request
+        
+        return entity;
+    }
+    
     
 }

@@ -65,5 +65,12 @@ public class RouteController {
             @RequestBody AddStopRequest request) {
         dispatchService.addStop(id, request.getOrderId(), request.getStopSequence());
         return ResponseEntity.ok().build();
-    }  
+    }
+    
+    @PostMapping("/{id}/stops/{stopId}/complete")
+    public ResponseEntity<Void> completeStop(@PathVariable UUID id, @PathVariable UUID stopId) {
+        dispatchService.completeStop(id, stopId);
+        return ResponseEntity.ok().build();
+    }
+    
 }

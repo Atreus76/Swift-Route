@@ -51,7 +51,7 @@
              t.latitude,
              t.longtitude
         FROM tracking_events t
-        WHERE t.order_id = #{id}
+        WHERE t.order_id = #{orderId}
     </select>
 
     <insert id="insert">
