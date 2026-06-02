@@ -5,11 +5,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.stereotype.Component;
+
 import com.example.swiftroute.order.domain.model.Order;
 import com.example.swiftroute.order.domain.model.OrderLine;
 import com.example.swiftroute.order.domain.model.OrderStatus;
 import com.example.swiftroute.order.domain.valueObject.DeliveryAddress;
-
+@Component
 public class OrderConverter {
     public Order toDomain(OrderPersistence persistence) { 
         if (persistence == null){

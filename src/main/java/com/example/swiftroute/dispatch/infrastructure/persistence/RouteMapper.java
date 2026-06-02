@@ -11,10 +11,10 @@ import com.example.swiftroute.dispatch.domain.model.RouteStatus;
 
 @Mapper
 public interface RouteMapper {
-    void insert(Route route);
-    void update(Route route);
-    Optional<Route> findById(@Param("id") UUID id);
-    Route findByStatus(@Param("status") RouteStatus status);
-    Route findByDriverId(@Param("driverId") UUID driverId);
+    void insert(RoutePersistence route);
+    void update(RoutePersistence route);
+    Optional<RoutePersistence> findById(@Param("id") UUID id);
+    RoutePersistence findByStatus(@Param("status") RouteStatus status);
+    RoutePersistence findByDriverId(@Param("driverId") UUID driverId);
     boolean existById(@Param("id") UUID id);
 }

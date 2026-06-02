@@ -4,15 +4,13 @@
 
 <mapper namespace="com.example.swiftroute.order.infrastructure.persistence.OrderMapper">
 
-    <resultMap id="OrderResultMap" type="com.example.swiftroute.order.domain.model.Order">
+    <resultMap id="OrderResultMap" type="com.example.swiftroute.order.infrastructure.persistence.OrderPersistence">
     <id property="id" column="id" 
     typeHandler="com.example.swiftroute.shared.infrastructure.persistence.UUIDTypeHandler"/>
     <result property="customerId" column="customer_id" 
     typeHandler="com.example.swiftroute.shared.infrastructure.persistence.UUIDTypeHandler"/>
     
-    <result property="status" column="status"
-            typeHandler="org.apache.ibatis.type.EnumTypeHandler"
-            />
+    <result property="status" column="status"/>
     <result property="createdAt"  column="created_at"/>
     <result property="updatedAt"  column="updated_at"/>
     <result property="version"    column="version"/>
@@ -28,7 +26,7 @@
 
     
     <collection property="orderLines" 
-                ofType="com.example.swiftroute.order.domain.model.OrderLine"
+                ofType="com.example.swiftroute.order.infrastructure.persistence.OrderLinePersistence"
                 select="findLinesByOrderId"
                 column="id"/>
 </resultMap>
@@ -42,7 +40,7 @@
     WHERE o.id = #{id}
 </select>
 
-<select id="findLinesByOrderId" resultType="com.example.swiftroute.order.domain.model.OrderLine">
+<select id="findLinesByOrderId" resultType="com.example.swiftroute.order.infrastructure.persistence.OrderLinePersistence">
     SELECT 
         id, order_id, sku, description,
         quantity, weight_kg, volume_m3, unit_price

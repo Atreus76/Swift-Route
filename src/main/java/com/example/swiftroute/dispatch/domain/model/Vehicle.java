@@ -40,6 +40,11 @@ public class Vehicle {
 
         return new Vehicle(id, type, licensePlate, VehicleStatus.AVAILABLE, maxWeightKg, maxVolumeM3);
     }
+
+    public static Vehicle reconstitute(UUID id, String type, String licensePlate, VehicleStatus status, BigDecimal maxWeightKg, BigDecimal maxVolumeM3) {
+        return new Vehicle(id, type, licensePlate, status, maxWeightKg, maxVolumeM3);
+    }
+    
     public void markReserved() {
         if (status == VehicleStatus.RESERVED) {
             throw new IllegalStateException("Vehicle is already reserved");

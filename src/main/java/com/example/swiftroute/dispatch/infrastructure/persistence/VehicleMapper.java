@@ -7,13 +7,12 @@ import java.util.UUID;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-import com.example.swiftroute.dispatch.domain.model.Vehicle;
 
 @Mapper
 public interface VehicleMapper {
-    void insert(Vehicle vehicle);
-    void update (Vehicle vehicle);
-    Optional<Vehicle> findById(@Param("id") UUID id);
-    List<Vehicle> findAll();
+    void insert(VehiclePersistence vehicle);
+    void update (VehiclePersistence vehicle);
+    Optional<VehiclePersistence> findById(@Param("id") UUID id);
+    List<VehiclePersistence> findAll();
     boolean existById(@Param("id") UUID id);
 }

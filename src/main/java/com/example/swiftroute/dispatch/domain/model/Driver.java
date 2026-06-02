@@ -36,6 +36,10 @@ public class Driver {
         return new Driver(UUID.randomUUID(), name, licenseNumber, phoneNumber, DriverStatus.AVAILABLE);
     }
 
+    public static Driver reconstitute(UUID id, String name, String licenseNumber, String phoneNumber, DriverStatus status) {
+        return new Driver(id, name, licenseNumber, phoneNumber, status);
+    }
+
     public void markAvailable(){
         if (status == DriverStatus.AVAILABLE){
             throw new IllegalStateException("Driver is already available");

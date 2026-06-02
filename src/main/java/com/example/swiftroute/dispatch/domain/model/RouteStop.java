@@ -37,6 +37,10 @@ public class RouteStop {
         return new RouteStop(UUID.randomUUID(), routeId, orderId, stopSequence, ETA, RouteStopStatus.PENDING);
     }
 
+    public static RouteStop reconstitute(UUID id, UUID routeId, UUID orderId, int stopSequence, Instant ETA, RouteStopStatus status) {
+        return new RouteStop(id, routeId, orderId, stopSequence, ETA, status);
+    }
+
     public void completeStop(){
         if (!status.equals(RouteStopStatus.PENDING)) {
             throw new IllegalStateException("Only routes in progress can be completed");

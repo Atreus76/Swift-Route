@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.swiftroute.dispatch.infrastructure.persistence.RouteMapper">
-    <resultMap id="RouteResultMap" type="com.example.swiftroute.dispatch.domain.model.Route">
+    <resultMap id="RouteResultMap" type="com.example.swiftroute.dispatch.infrastructure.persistence.RoutePersistence">
         <id property="id" column="id" 
         typeHandler="com.example.swiftroute.shared.infrastructure.persistence.UUIDTypeHandler"/>
         <result property="driverId" column="driver_id" 
@@ -10,11 +10,10 @@
         <result property="vehicleId" column="vehicle_id" 
         typeHandler="com.example.swiftroute.shared.infrastructure.persistence.UUIDTypeHandler"/>
         <result property="status" column="route_status"
-                javaType="com.example.swiftroute.dispatch.domain.model.RouteStatus"
                 />
         <result property="plannedDate" column="planned_date"/>
         <collection property="stops"
-                ofType="com.example.swiftroute.dispatch.domain.model.RouteStop"
+                ofType="com.example.swiftroute.dispatch.infrastructure.persistence.RouteStopPersistence"
                 select="findStopsByRouteId"
                 column="id"/>
     </resultMap>
@@ -25,7 +24,7 @@
     WHERE id = #{id}
 </select>
 
-<select id="findStopsByRouteId" resultType="com.example.swiftroute.dispatch.domain.model.RouteStop">
+<select id="findStopsByRouteId" resultType="com.example.swiftroute.dispatch.infrastructure.persistence.RouteStopPersistence">
     SELECT 
         id, route_id, order_id,
         stop_sequence, eta, status

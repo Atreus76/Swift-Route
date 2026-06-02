@@ -26,15 +26,16 @@ public class DispatchApplicationService {
     private final VehicleRepository vehicleRepository;
     private ApplicationEventPublisher eventPublisher;
 
-    public DispatchApplicationService(RouteRepository routeRepository, DriverRepository driverRepository, VehicleRepository vehicleRepository) {
+    public DispatchApplicationService(RouteRepository routeRepository, DriverRepository driverRepository,
+            VehicleRepository vehicleRepository) {
         this.routeRepository = routeRepository;
         this.driverRepository = driverRepository;
         this.vehicleRepository = vehicleRepository;
     }
 
     @Transactional
-    public Route createRoute(Date plannedDate){
-        Route route = Route.create(UUID.randomUUID(), UUID.randomUUID(),plannedDate);
+    public Route createRoute(Date plannedDate) {
+        Route route = Route.create(UUID.randomUUID(), UUID.randomUUID(), plannedDate);
         routeRepository.save(route);
         return route;
     }
@@ -42,12 +43,14 @@ public class DispatchApplicationService {
     @Transactional
     public void assignDriver(UUID routeId, UUID driverId, UUID vehicleId) {
         Route route = routeRepository.findById(routeId).orElseThrow(
-            () -> EntityNotFoundException.of("Route", routeId));
+                () -> EntityNotFoundException.of("Route", routeId));
         Driver driver = driverRepository.findById(driverId).orElseThrow(
-            () -> EntityNotFoundException.of("Driver", driverId));
+                () -> EntityNotFoundException.of("Driver", driverId));
+        System.out.println("Driver name: " + driver.getName());
+        System.out.println("Driver status: " + driver.getStatus());
         Vehicle vehicle = vehicleRepository.findById(vehicleId).orElseThrow(
-            () -> EntityNotFoundException.of("Vehicle", vehicleId));
-        
+                () -> EntityNotFoundException.of("Vehicle", vehicleId));
+
         route.assignDriver(driver, vehicle);
         driver.markOnRoute();
         vehicle.markReserved();
@@ -58,9 +61,9 @@ public class DispatchApplicationService {
     }
 
     @Transactional
-    public void addStop(UUID routeId, UUID orderId, int stopSequence){
+    public void addStop(UUID routeId, UUID orderId, int stopSequence) {
         Route route = routeRepository.findById(routeId).orElseThrow(
-            () -> EntityNotFoundException.of("Route", routeId));
+                () -> EntityNotFoundException.of("Route", routeId));
         RouteStop stop = RouteStop.of(routeId, orderId, stopSequence, Instant.now());
         System.out.println("Loaded route status: " + route.getStatus());
         route.addStop(stop);
@@ -69,12 +72,11 @@ public class DispatchApplicationService {
     }
 
     @Transactional
-    public void dispatchRoute(UUID routeId){
+    public void dispatchRoute(UUID routeId) {
         Route route = routeRepository.findById(routeId).orElseThrow(
-            () -> EntityNotFoundException.of("Route", routeId));
+                () -> EntityNotFoundException.of("Route", routeId));
         Vehicle vehicle = vehicleRepository.findById(route.getVehicleId()).orElseThrow(
-            () -> EntityNotFoundException.of("Vehicle", route.getVehicleId())
-        );
+                () -> EntityNotFoundException.of("Vehicle", route.getVehicleId()));
 
         route.dispatch();
         vehicle.markInUse();
@@ -84,13 +86,13 @@ public class DispatchApplicationService {
     }
 
     @Transactional
-    public void completeRoute(UUID routeId){
+    public void completeRoute(UUID routeId) {
         Route route = routeRepository.findById(routeId).orElseThrow(
-            () -> EntityNotFoundException.of("Route", routeId));
+                () -> EntityNotFoundException.of("Route", routeId));
         Vehicle vehicle = vehicleRepository.findById(route.getVehicleId()).orElseThrow(
-            () -> EntityNotFoundException.of("Vehicle", route.getVehicleId()));
+                () -> EntityNotFoundException.of("Vehicle", route.getVehicleId()));
         Driver driver = driverRepository.findById(route.getDriverId()).orElseThrow(
-            () -> EntityNotFoundException.of("Driver", route.getDriverId()));
+                () -> EntityNotFoundException.of("Driver", route.getDriverId()));
 
         route.complete();
         vehicle.markAvailable();
@@ -101,42 +103,42 @@ public class DispatchApplicationService {
         driverRepository.save(driver);
     }
 
-    public Route getRoute(UUID routeId){
+    public Route getRoute(UUID routeId) {
         return routeRepository.findById(routeId).orElseThrow(
-            () -> EntityNotFoundException.of("Route", routeId));
+                () -> EntityNotFoundException.of("Route", routeId));
     }
 
     @Transactional
-    public Driver createDriver(String name, String licenseNumber, String phoneNumber){
+    public Driver createDriver(String name, String licenseNumber, String phoneNumber) {
         Driver driver = Driver.register(name, licenseNumber, phoneNumber);
         driverRepository.save(driver);
         return driver;
     }
 
     @Transactional
-    public Vehicle createVehicle(String type, String licensePlate, BigDecimal maxWeightKg, BigDecimal maxVolumeM3){
+    public Vehicle createVehicle(String type, String licensePlate, BigDecimal maxWeightKg, BigDecimal maxVolumeM3) {
         Vehicle vehicle = Vehicle.register(UUID.randomUUID(), type, licensePlate, maxWeightKg, maxVolumeM3);
         vehicleRepository.save(vehicle);
         return vehicle;
     }
 
     @Transactional
-    public void completeStop(UUID routeId, UUID stopId){
+    public void completeStop(UUID routeId, UUID stopId) {
         Route route = routeRepository.findById(routeId).orElseThrow(
-            () -> EntityNotFoundException.of("Route", routeId));
+                () -> EntityNotFoundException.of("Route", routeId));
         route.completeStop(stopId);
         routeRepository.save(route);
         eventPublisher.publishEvent(new RouteStopCompletedEvent(routeId, stopId, Instant.now()));
     }
 
-    public Driver getDriver(UUID driverId){
+    public Driver getDriver(UUID driverId) {
         return driverRepository.findById(driverId).orElseThrow(
-            () -> EntityNotFoundException.of("Driver", driverId));
+                () -> EntityNotFoundException.of("Driver", driverId));
     }
 
-    public Vehicle getVehicle(UUID vehicleId){
+    public Vehicle getVehicle(UUID vehicleId) {
         return vehicleRepository.findById(vehicleId).orElseThrow(
-            () -> EntityNotFoundException.of("Vehicle", vehicleId));
+                () -> EntityNotFoundException.of("Vehicle", vehicleId));
     }
 
 }

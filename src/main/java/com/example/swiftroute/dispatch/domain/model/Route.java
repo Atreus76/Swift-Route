@@ -34,6 +34,10 @@ public class Route {
         return new Route(UUID.randomUUID(), driverId, vehicleId, RouteStatus.PENDING, plannedDate, null);
     }
 
+    public static Route reconstitute(UUID id, UUID driverId, UUID vehicleId, RouteStatus status, Date plannedDate, List<RouteStop> stops) {
+        return new Route(id, driverId, vehicleId, status, plannedDate, stops);
+    }
+
     public void assignDriver(Driver driver, Vehicle vehicle) {
         if (driver == null) {
             throw new IllegalArgumentException("Driver cannot be null");
