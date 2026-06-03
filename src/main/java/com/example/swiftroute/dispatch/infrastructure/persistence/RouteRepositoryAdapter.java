@@ -26,6 +26,11 @@ public class RouteRepositoryAdapter implements RouteRepository {
         } else {
             routeMapper.insert(persistence);
         }
+        routeMapper.deleteStopsByRouteId(route.getId());
+        route.getStops().forEach(stop -> {
+            RouteStopPersistence stopPersistence = routeConverter.toStopPersistence(stop);
+            routeMapper.insertStop(stopPersistence);
+        });
     }
 
     @Override

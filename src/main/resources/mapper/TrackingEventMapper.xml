@@ -3,7 +3,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.example.swiftroute.tracking.infrastructure.persistence.TrackingEventMapper">
-    <resultMap id="TrackingEventResultMap" type="com.example.swiftroute.tracking.domain.model.TrackingEvent">
+    <resultMap id="TrackingEventResultMap" type="com.example.swiftroute.tracking.infrastructure.persistence.TrackingEventPersistence">
     <id property="id" column="id"
     typeHandler="com.example.swiftroute.shared.infrastructure.persistence.UUIDTypeHandler"/>
     <result property="orderId" column="order_id" 
@@ -12,32 +12,13 @@
     typeHandler="com.example.swiftroute.shared.infrastructure.persistence.UUIDTypeHandler"/>
     <result property="routeStopId" column="route_stop_id" 
     typeHandler="com.example.swiftroute.shared.infrastructure.persistence.UUIDTypeHandler"/>
-    
-    <result property="status" column="status"
-            typeHandler="org.apache.ibatis.type.EnumTypeHandler"
-            />
-
+    <result property="status" column="status"/>
     <result property="description" column="description"/>
     <result property="timestamp" column="time_stamp"/>
     <result property="latitude" column="latitude"/>
     <result property="longtitude" column="longtitude"/>
 
 </resultMap>
-
-    <select id="findById" resultMap="TrackingEventResultMap">
-        SELECT
-             id,
-             order_id,
-             route_id,
-             route_stop_id,
-             status,
-             description,
-             time_stamp,
-             latitude,
-             longtitude
-        FROM tracking_events
-        WHERE id = #{id}
-    </select>
 
     <select id="findByOrderId" resultMap="TrackingEventResultMap">
         SELECT
@@ -60,10 +41,8 @@
                                         latitude, longtitude)
         VALUES (#{id, jdbcType=OTHER}, #{orderId, jdbcType=OTHER},
                 #{routeId, jdbcType=OTHER}, #{routeStopId, jdbcType=OTHER},
-                #{status}, #{description}, #{time_stamp}, #{latitude}, #{longtitude})
+                #{status}, #{description}, #{timestamp}, #{latitude}, #{longtitude})
     </insert>
-    <select id="existById" resultType="boolean">
-    SELECT COUNT(1) &gt; 0 FROM orders WHERE id = #{id}
-    </select>
+
 
 </mapper>

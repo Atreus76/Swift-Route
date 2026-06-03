@@ -24,10 +24,15 @@ public class OrderRepositoryAdapter implements OrderRepository{
     public void save(Order order) {
         OrderPersistence persistence = orderConverter.toPersistence(order);
         if (orderMapper.existById(order.getId())) {
-        orderMapper.update(persistence);
-    } else {
-        orderMapper.insert(persistence);
-    }
+            orderMapper.update(persistence);
+        } else {
+            orderMapper.insert(persistence);
+        }
+        orderMapper.deleteLinesByOrderId(order.getId());
+        order.getLines().forEach(line -> {
+        OrderLinePersistence linePersistence = orderConverter.toLinePersistence(line);
+        orderMapper.insertLine(linePersistence);
+});
     }
 
     @Override

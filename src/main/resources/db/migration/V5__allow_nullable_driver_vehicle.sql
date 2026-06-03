@@ -1,0 +1,3 @@
+ALTER TABLE routes 
+    ALTER COLUMN driver_id DROP NOT NULL,
+    ALTER COLUMN vehicle_id DROP NOT NULL;

@@ -54,7 +54,7 @@ public class RouteConverter {
         );
     }
 
-    private RouteStopPersistence toStopPersistence(RouteStop stop){
+    public RouteStopPersistence toStopPersistence(RouteStop stop){
         if (stop == null){
             return null;
         }

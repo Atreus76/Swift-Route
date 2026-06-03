@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import com.example.swiftroute.order.domain.model.OrderLine;
 import com.example.swiftroute.order.domain.valueObject.DeliveryAddress;
 
 public class OrderPersistence {

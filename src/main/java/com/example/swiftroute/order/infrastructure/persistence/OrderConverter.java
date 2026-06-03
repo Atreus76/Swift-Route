@@ -1,6 +1,5 @@
 package com.example.swiftroute.order.infrastructure.persistence;
 
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -82,7 +81,7 @@ public class OrderConverter {
     );
 }
 
-    private OrderLinePersistence toLinePersistence(OrderLine line) {
+    public OrderLinePersistence toLinePersistence(OrderLine line) {
     if (line == null) {
         return null;
     }

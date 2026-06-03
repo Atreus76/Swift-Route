@@ -7,6 +7,7 @@ import com.example.swiftroute.tracking.application.service.TrackingService;
 import com.example.swiftroute.tracking.domain.model.TrackingEvent;
 import com.example.swiftroute.tracking.infrastructure.web.dto.TrackingEventResponse;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.http.ResponseEntity;
@@ -27,10 +28,15 @@ public class TrackingController {
     }
 
     @GetMapping("orders/{orderId}")
-    public ResponseEntity<TrackingEventResponse> getTrackingEvent(@PathVariable UUID orderId) {
-        TrackingEvent trackingEvent = trackingService.getTrackingEventByOrderId(orderId);
-        return ResponseEntity.ok(TrackingEventResponse.from(trackingEvent));
-    }
+    public ResponseEntity<List<TrackingEventResponse>> getTrackingEventsByOrderId(@PathVariable UUID orderId) {
+    List<TrackingEvent> trackingEvents = trackingService.getTrackingEventByOrderId(orderId);
+
+    List<TrackingEventResponse> response = trackingEvents.stream()
+            .map(TrackingEventResponse::from)
+            .toList();
+
+    return ResponseEntity.ok(response);
+}
 
     @PostMapping
     public String addTrackingEvent(@RequestBody String entity) {

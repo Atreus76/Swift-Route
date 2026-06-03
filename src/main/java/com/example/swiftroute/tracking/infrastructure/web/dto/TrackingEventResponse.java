@@ -11,14 +11,15 @@ import lombok.Data;
 @Data
 public class TrackingEventResponse {
     private UUID id; 
-    private Instant timestamp; 
-    private TrackingEventType eventType; 
-    private String description; 
-
     // Links to your domains 
     private UUID orderId; 
     private UUID routeId; 
     private UUID routeStopId;
+    
+    private Instant timestamp; 
+    private TrackingEventType eventType; 
+    private String description; 
+
 
     private Double latitude;
     private Double longtitude;
@@ -27,7 +28,7 @@ public class TrackingEventResponse {
         TrackingEventResponse response = new TrackingEventResponse();
         response.setId(trackingEvent.getId());
         response.setTimestamp(trackingEvent.getTimestamp());
-        response.setEventType(trackingEvent.getEventType());
+        response.setEventType(trackingEvent.getStatus());
         response.setDescription(trackingEvent.getDescription());
         response.setOrderId(trackingEvent.getOrderId());
         response.setRouteId(trackingEvent.getRouteId());

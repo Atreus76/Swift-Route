@@ -52,8 +52,8 @@ public class RouteStopPersistence {
         return ETA;
     }
 
-    public void setETA(Instant eTA) {
-        ETA = eTA;
+    public void setETA(Instant ETA) {
+        this.ETA = ETA;
     }
 
     public String getStatus() {

@@ -3,7 +3,9 @@ package com.example.swiftroute.dispatch.application.service;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.time.Instant;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -14,6 +16,7 @@ import com.example.swiftroute.dispatch.application.port.RouteRepository;
 import com.example.swiftroute.dispatch.application.port.VehicleRepository;
 import com.example.swiftroute.dispatch.domain.model.Driver;
 import com.example.swiftroute.dispatch.domain.model.Route;
+import com.example.swiftroute.dispatch.domain.model.RouteDispatchedEvent;
 import com.example.swiftroute.dispatch.domain.model.RouteStop;
 import com.example.swiftroute.dispatch.domain.model.RouteStopCompletedEvent;
 import com.example.swiftroute.dispatch.domain.model.Vehicle;
@@ -36,7 +39,7 @@ public class DispatchApplicationService {
 
     @Transactional
     public Route createRoute(Date plannedDate) {
-        Route route = Route.create(UUID.randomUUID(), UUID.randomUUID(), plannedDate);
+        Route route = Route.create(plannedDate);
         routeRepository.save(route);
         return route;
     }
@@ -66,7 +69,7 @@ public class DispatchApplicationService {
         Route route = routeRepository.findById(routeId).orElseThrow(
                 () -> EntityNotFoundException.of("Route", routeId));
         RouteStop stop = RouteStop.of(routeId, orderId, stopSequence, Instant.now());
-        // System.out.println("Loaded route status: " + route.getStatus());
+        System.out.println("Created routeStop: " + stop.getId());
         route.addStop(stop);
 
         routeRepository.save(route);
@@ -81,9 +84,13 @@ public class DispatchApplicationService {
 
         route.dispatch();
         vehicle.markInUse();
-
+        
         routeRepository.save(route);
         vehicleRepository.save(vehicle);
+        List<UUID> orderIds = route.getStops().stream()
+                .map(RouteStop::getOrderId)
+                .collect(Collectors.toList());
+        eventPublisher.publishEvent(new RouteDispatchedEvent(routeId, orderIds, Instant.now()));
     }
 
     @Transactional
@@ -129,12 +136,13 @@ public class DispatchApplicationService {
                 () -> EntityNotFoundException.of("Route", routeId));
 
         RouteStop stop = route.getStops().stream()
-            .filter(s -> s.getId().equals(stopId))
-            .findFirst()
-            .orElseThrow(() -> EntityNotFoundException.of("RouteStop", stopId));
+                .filter(s -> s.getId().equals(stopId))
+                .findFirst()
+                .orElseThrow(() -> EntityNotFoundException.of("RouteStop", stopId));
         route.completeStop(stopId);
         routeRepository.save(route);
         eventPublisher.publishEvent(new RouteStopCompletedEvent(routeId, stop.getOrderId(), Instant.now()));
+        System.out.println(">>> RouteStopCompletedEvent fired for order: " + stop.getOrderId());
     }
 
     public Driver getDriver(UUID driverId) {

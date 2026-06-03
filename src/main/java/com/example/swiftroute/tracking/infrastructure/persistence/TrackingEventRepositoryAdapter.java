@@ -1,7 +1,6 @@
 package com.example.swiftroute.tracking.infrastructure.persistence;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.stereotype.Repository;
@@ -12,25 +11,20 @@ import com.example.swiftroute.tracking.domain.model.TrackingEvent;
 public class TrackingEventRepositoryAdapter implements TrackingRepository{
 
     private final TrackingEventMapper trackingEventMapper;
+    private final TrackingEventConverter trackingEventConverter;
 
-    public TrackingEventRepositoryAdapter(TrackingEventMapper trackingEventMapper){
+    public TrackingEventRepositoryAdapter(TrackingEventMapper trackingEventMapper, TrackingEventConverter trackingEventConverter){
         this.trackingEventMapper = trackingEventMapper;
+        this.trackingEventConverter = trackingEventConverter;
     }
     
     
     @Override
     public void save(TrackingEvent event) {
-        if(trackingEventMapper.existById(event.getId())){
-            trackingEventMapper.update(event);
-        }else {
-            trackingEventMapper.insert(event);
-        }
+        TrackingEventPersistence persistence = trackingEventConverter.toPersistence(event);
+        trackingEventMapper.insert(persistence);
     }
 
-    @Override
-    public Optional<TrackingEvent> findById(UUID id) {
-        return trackingEventMapper.findById(id);    
-    }
 
     @Override
     public List<TrackingEvent> findAll() {
@@ -40,8 +34,11 @@ public class TrackingEventRepositoryAdapter implements TrackingRepository{
 
 
     @Override
-    public Optional<TrackingEvent> findByOrderId(UUID id) {
-        return trackingEventMapper.findByOrderId(id);
+    public List<TrackingEvent> findByOrderId(UUID orderId) {
+    return trackingEventMapper.findByOrderId(orderId)
+            .stream()
+            .map(trackingEventConverter::toDomain)
+            .toList();
     }
     
 }

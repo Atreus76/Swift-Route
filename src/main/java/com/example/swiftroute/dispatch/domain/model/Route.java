@@ -27,11 +27,11 @@ public class Route {
         // For ORM
     }
 
-    public static Route create(UUID driverId, UUID vehicleId, Date plannedDate) {
-        if(driverId == null || vehicleId == null || plannedDate == null) {
-            throw new IllegalArgumentException("Driver ID, Vehicle ID and Planned Date must be provided");
+    public static Route create(Date plannedDate) {
+        if(plannedDate == null) {
+            throw new IllegalArgumentException("Planned Date must be provided");
         }
-        return new Route(UUID.randomUUID(), driverId, vehicleId, RouteStatus.PENDING, plannedDate, null);
+        return new Route(UUID.randomUUID(), null, null, RouteStatus.PENDING, plannedDate, null);
     }
 
     public static Route reconstitute(UUID id, UUID driverId, UUID vehicleId, RouteStatus status, Date plannedDate, List<RouteStop> stops) {

@@ -5,31 +5,26 @@
 <mapper namespace="com.example.swiftroute.order.infrastructure.persistence.OrderMapper">
 
     <resultMap id="OrderResultMap" type="com.example.swiftroute.order.infrastructure.persistence.OrderPersistence">
-    <id property="id" column="id" 
-    typeHandler="com.example.swiftroute.shared.infrastructure.persistence.UUIDTypeHandler"/>
-    <result property="customerId" column="customer_id" 
-    typeHandler="com.example.swiftroute.shared.infrastructure.persistence.UUIDTypeHandler"/>
-    
-    <result property="status" column="status"/>
-    <result property="createdAt"  column="created_at"/>
-    <result property="updatedAt"  column="updated_at"/>
-    <result property="version"    column="version"/>
-    <!-- DeliveryAddress embedded fields -->
+        <id property="id" column="id" typeHandler="com.example.swiftroute.shared.infrastructure.persistence.UUIDTypeHandler"/>
+        <result property="customerId" column="customer_id" typeHandler="com.example.swiftroute.shared.infrastructure.persistence.UUIDTypeHandler"/>
 
-    <association property="deliveryAddress" javaType="com.example.swiftroute.order.domain.valueObject.DeliveryAddress">
-        <result property="street"     column="street"/>
-        <result property="city"       column="city"/>
-        <result property="postalCode" column="postal_code"/>
-        <result property="country"    column="country"/>
-    </association>
+        <result property="status" column="status"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+        <result property="version" column="version"/>
+        <!-- DeliveryAddress embedded fields -->
+
+        <association property="deliveryAddress" javaType="com.example.swiftroute.order.domain.valueObject.DeliveryAddress">
+            <result property="street" column="street"/>
+            <result property="city" column="city"/>
+            <result property="postalCode" column="postal_code"/>
+            <result property="country" column="country"/>
+        </association>
 
 
-    
-    <collection property="orderLines" 
-                ofType="com.example.swiftroute.order.infrastructure.persistence.OrderLinePersistence"
-                select="findLinesByOrderId"
-                column="id"/>
-</resultMap>
+
+        <collection property="orderLines" ofType="com.example.swiftroute.order.infrastructure.persistence.OrderLinePersistence" select="findLinesByOrderId" column="id"/>
+    </resultMap>
 
     <select id="findById" resultMap="OrderResultMap">
     SELECT 
@@ -38,15 +33,15 @@
         o.created_at, o.updated_at, o.version
     FROM orders o
     WHERE o.id = #{id}
-</select>
+    </select>
 
-<select id="findLinesByOrderId" resultType="com.example.swiftroute.order.infrastructure.persistence.OrderLinePersistence">
+    <select id="findLinesByOrderId" resultType="com.example.swiftroute.order.infrastructure.persistence.OrderLinePersistence">
     SELECT 
         id, order_id, sku, description,
         quantity, weight_kg, volume_m3, unit_price
     FROM order_lines
     WHERE order_id = #{id}
-</select>
+    </select>
 
     <insert id="insert">
         INSERT INTO orders (id, customer_id, status,
@@ -56,6 +51,12 @@
                 #{deliveryAddress.street}, #{deliveryAddress.city},
                 #{deliveryAddress.postalCode}, #{deliveryAddress.country},
                 #{createdAt}, #{updatedAt}, #{version})
+    </insert>
+
+    <insert id="insertLine">
+    INSERT INTO order_lines (id, order_id, sku, description, quantity, weight_kg, volume_m3, unit_price)
+    VALUES (#{id, jdbcType=OTHER}, #{orderId, jdbcType=OTHER}, #{sku}, #{description}, 
+            #{quantity}, #{weightKg}, #{volumeM3}, #{unitPrice})
     </insert>
 
     <update id="update">
@@ -68,6 +69,10 @@
 
     <select id="existById" resultType="boolean">
     SELECT COUNT(1) &gt; 0 FROM orders WHERE id = #{id}
-</select>
+    </select>
+
+    <delete id="deleteLinesByOrderId">
+    DELETE FROM order_lines WHERE order_id = #{orderId, jdbcType=OTHER}
+    </delete>
 
 </mapper>
