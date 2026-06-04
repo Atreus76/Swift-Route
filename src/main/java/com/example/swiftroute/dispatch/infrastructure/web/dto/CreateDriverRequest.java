@@ -6,10 +6,10 @@ import lombok.Data;
 
 @Data
 public class CreateDriverRequest {
-    @NotNull
+    @NotNull(message = "Driver name is required")
     private String name;
-    @NotNull
+    @NotNull(message = "License number is required")
     private String licenseNumber;
-    @NotNull
+    @NotNull(message = "Phone number is required")
     private String phoneNumber;
 }

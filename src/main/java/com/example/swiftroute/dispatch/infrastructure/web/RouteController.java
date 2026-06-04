@@ -18,6 +18,8 @@ import com.example.swiftroute.dispatch.infrastructure.web.dto.AssignDriverReques
 import com.example.swiftroute.dispatch.infrastructure.web.dto.CreateRouteRequest;
 import com.example.swiftroute.dispatch.infrastructure.web.dto.RouteResponse;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api/routes")
 public class RouteController {
@@ -28,7 +30,7 @@ public class RouteController {
     }
 
     @PostMapping
-    public ResponseEntity<RouteResponse> createRoute(@RequestBody CreateRouteRequest request){
+    public ResponseEntity<RouteResponse> createRoute(@Valid @RequestBody CreateRouteRequest request){
         Route route = dispatchService.createRoute(request.getPlannedDate());
         return ResponseEntity.status(HttpStatus.CREATED).body(RouteResponse.from(route));
     }

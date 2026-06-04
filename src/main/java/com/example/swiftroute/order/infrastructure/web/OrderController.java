@@ -18,6 +18,8 @@ import com.example.swiftroute.order.infrastructure.web.dto.OrderLineRequest;
 import com.example.swiftroute.order.infrastructure.web.dto.OrderResponse;
 import com.example.swiftroute.order.infrastructure.web.dto.PlaceOrderRequest;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api/orders")
 public class OrderController {
@@ -28,7 +30,7 @@ public class OrderController {
     }
 
     @PostMapping
-    public ResponseEntity<OrderResponse> placeOrder(@RequestBody PlaceOrderRequest request){
+    public ResponseEntity<OrderResponse> placeOrder(@Valid @RequestBody PlaceOrderRequest request){
         DeliveryAddress deliveryAddress = DeliveryAddress.of(
             request.getStreet(),
             request.getCity(),
@@ -36,7 +38,7 @@ public class OrderController {
             request.getCountry()
         );
 
-        Order order = orderService.placeOrder(UUID.randomUUID(), deliveryAddress);
+        Order order = orderService.placeOrder(request.getCustomerId(), deliveryAddress);
         return ResponseEntity.status(HttpStatus.CREATED).body(OrderResponse.from(order));
     }
 
@@ -59,7 +61,7 @@ public class OrderController {
     }
 
     @PostMapping("/{id}/lines")
-    public ResponseEntity<Void> addLine(@PathVariable UUID id, @RequestBody OrderLineRequest request){
+    public ResponseEntity<Void> addLine(@PathVariable UUID id,@Valid @RequestBody OrderLineRequest request){
         orderService.addLine(id, OrderLineRequest.toOrderLine(request));
         return ResponseEntity.ok().build();
     }

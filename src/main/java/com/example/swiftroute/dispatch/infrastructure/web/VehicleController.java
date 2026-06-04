@@ -16,6 +16,8 @@ import com.example.swiftroute.dispatch.domain.model.Vehicle;
 import com.example.swiftroute.dispatch.infrastructure.web.dto.CreateVehicleRequest;
 import com.example.swiftroute.dispatch.infrastructure.web.dto.VehicleResponse;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api/vehicles")
 public class VehicleController {
@@ -26,7 +28,7 @@ public class VehicleController {
     }
 
     @PostMapping
-    public ResponseEntity<VehicleResponse> createVehicle(@RequestBody CreateVehicleRequest request){
+    public ResponseEntity<VehicleResponse> createVehicle(@Valid @RequestBody CreateVehicleRequest request){
         Vehicle vehicle = dispatchService.createVehicle(request.getType(), request.getLicensePlate(), request.getMaxWeightKg(), request.getMaxVolumeM3());
         return ResponseEntity.status(HttpStatus.CREATED).body(VehicleResponse.from(vehicle));
     }

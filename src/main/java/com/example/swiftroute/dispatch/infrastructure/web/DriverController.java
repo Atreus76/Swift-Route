@@ -17,6 +17,8 @@ import com.example.swiftroute.dispatch.domain.model.Driver;
 import com.example.swiftroute.dispatch.infrastructure.web.dto.CreateDriverRequest;
 import com.example.swiftroute.dispatch.infrastructure.web.dto.DriverResponse;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api/drivers")
 public class DriverController {
@@ -27,7 +29,7 @@ public class DriverController {
     }
 
     @PostMapping
-    public ResponseEntity<DriverResponse> createDriver(@RequestBody CreateDriverRequest request){
+    public ResponseEntity<DriverResponse> createDriver(@Valid @RequestBody CreateDriverRequest request){
         Driver driver = dispatchService.createDriver(request.getName(), request.getLicenseNumber(), request.getPhoneNumber());
         return ResponseEntity.status(HttpStatus.CREATED).body(DriverResponse.from(driver));
     }
