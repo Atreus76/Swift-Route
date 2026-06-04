@@ -9,6 +9,8 @@ import org.springframework.stereotype.Repository;
 import com.example.swiftroute.order.application.port.OrderRepository;
 import com.example.swiftroute.order.domain.model.Order;
 import com.example.swiftroute.order.domain.model.OrderStatus;
+import com.example.swiftroute.shared.domain.Page;
+import com.example.swiftroute.shared.domain.PageRequest;
 
 @Repository
 public class OrderRepositoryAdapter implements OrderRepository{
@@ -42,14 +44,18 @@ public class OrderRepositoryAdapter implements OrderRepository{
     }
 
     @Override
-    public List<Order> findByCustomerId(UUID customerId) {
+    public Page<Order> findByCustomerId(UUID customerId, PageRequest pageRequest) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'findByCustomerId'");
     }
 
     @Override
-    public List<Order> findByStatus(OrderStatus status) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findByStatus'");
+    public Page<Order> findByStatus(OrderStatus status, PageRequest pageRequest) {
+        List<Order> orders = orderMapper.findByStatus(status, pageRequest)
+            .stream()
+            .map(orderConverter::toDomain)
+            .toList();
+        long totalElements = orderMapper.countByStatus(status);
+        return new Page<>(orders, pageRequest.getPage(), pageRequest.getSize(), totalElements);
     }
 }

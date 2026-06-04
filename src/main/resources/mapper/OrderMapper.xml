@@ -26,13 +26,14 @@
         <collection property="orderLines" ofType="com.example.swiftroute.order.infrastructure.persistence.OrderLinePersistence" select="findLinesByOrderId" column="id"/>
     </resultMap>
 
-    <select id="findById" resultMap="OrderResultMap">
+    <select id="findByStatus" resultMap="OrderResultMap">
     SELECT 
         o.id, o.customer_id, o.status,
         o.street, o.city, o.postal_code, o.country,
         o.created_at, o.updated_at, o.version
     FROM orders o
-    WHERE o.id = #{id}
+    WHERE o.status = #{status}
+    LIMIT #{pageRequest.size} OFFSET #{pageRequest.offset}
     </select>
 
     <select id="findLinesByOrderId" resultType="com.example.swiftroute.order.infrastructure.persistence.OrderLinePersistence">
@@ -41,6 +42,10 @@
         quantity, weight_kg, volume_m3, unit_price
     FROM order_lines
     WHERE order_id = #{id}
+    </select>
+
+    <select id="countByStatus" resultType="long">
+    SELECT COUNT(*) FROM orders WHERE status = #{status}
     </select>
 
     <insert id="insert">

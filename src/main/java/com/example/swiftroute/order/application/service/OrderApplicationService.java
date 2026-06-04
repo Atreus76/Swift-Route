@@ -19,8 +19,11 @@ import com.example.swiftroute.order.domain.model.OrderDeliveredEvent;
 import com.example.swiftroute.order.domain.model.OrderDispatchedEvent;
 import com.example.swiftroute.order.domain.model.OrderLine;
 import com.example.swiftroute.order.domain.model.OrderPlacedEvent;
+import com.example.swiftroute.order.domain.model.OrderStatus;
 import com.example.swiftroute.order.domain.valueObject.DeliveryAddress;
 import com.example.swiftroute.shared.EntityNotFoundException;
+import com.example.swiftroute.shared.domain.Page;
+import com.example.swiftroute.shared.domain.PageRequest;
 @Service
 public class OrderApplicationService {
     private final OrderRepository orderRepository;
@@ -72,6 +75,10 @@ public class OrderApplicationService {
     public Order getOrder(UUID orderId) {
         return orderRepository.findById(orderId).orElseThrow(
             () -> EntityNotFoundException.of("Order", orderId));
+    }
+
+    public Page<Order> getOrdersByStatus(OrderStatus status, PageRequest pageRequest) {
+        return orderRepository.findByStatus(status, pageRequest);
     }
 
     @Transactional
