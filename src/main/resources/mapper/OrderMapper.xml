@@ -36,6 +36,15 @@
     LIMIT #{pageRequest.size} OFFSET #{pageRequest.offset}
     </select>
 
+    <select id="findById" resultMap="OrderResultMap">
+    SELECT
+        o.id, o.customer_id, o.status,
+        o.street, o.city, o.postal_code, o.country,
+        o.created_at, o.updated_at, o.version
+    FROM orders o
+    WHERE o.id = #{id, jdbcType=OTHER}
+    </select>
+
     <select id="findLinesByOrderId" resultType="com.example.swiftroute.order.infrastructure.persistence.OrderLinePersistence">
     SELECT 
         id, order_id, sku, description,
