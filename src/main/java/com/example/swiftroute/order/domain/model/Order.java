@@ -1,5 +1,6 @@
 package com.example.swiftroute.order.domain.model;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -111,7 +112,17 @@ public class Order {
         return Collections.unmodifiableList(orderLines);
     }
 
-    
+    public BigDecimal totalWeight(){
+        return orderLines.stream()
+                        .map(OrderLine::totalWeight)
+                        .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    public BigDecimal totalVolume(){
+        return orderLines.stream()
+                        .map(OrderLine::totalVolume)
+                        .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
     
     public UUID getId() {
         return id;
